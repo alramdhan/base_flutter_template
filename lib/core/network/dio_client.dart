@@ -1,65 +1,32 @@
 import 'package:dio/dio.dart';
-import 'package:dartz/dartz.dart';
-import 'package:login_biometrics_app/core/errors/failures.dart';
+import 'package:login_biometrics_app/core/constants/api_constants.dart';
+import 'package:login_biometrics_app/core/network/auth_interceptor.dart';
 
-abstract class DioClient {
-  Future<Either<Failure, T>> post<T>(
-    String endpoint, {
-      Object? data,
-      Map<String, dynamic>? queryParams,
-      Options? options,
-      required T Function(dynamic responseData) fromJson
-    }
-  );
-  Future<Either<Failure, T>> get<T>(
-    String endpoint, {
-      Map<String, dynamic>? queryParams,
-      Options? options,
-      required T Function(dynamic responseData) fromJson
-    }
-  );
-}
+class DioClient {
+  late Dio dio;
+  final AuthInterceptor authInterceptor;
+  final LogInterceptor logInterceptor;
 
-class DioClientImpl implements DioClient {
-  final Dio _dio;
+  DioClient({required this.authInterceptor, required this.logInterceptor}) {
+    final baseOptions = BaseOptions(
+      baseUrl: "${ApiConstants.baseUrl}/api/v1",
+      connectTimeout: const Duration(milliseconds: ApiConstants.connectTimeout),
+      receiveTimeout: const Duration(milliseconds: ApiConstants.receiveTimeout),
+      contentType: 'application/json',
+      responseType: ResponseType.json
+    );
+    final dio = Dio(baseOptions);
 
-  DioClientImpl(this._dio);
-  
-  @override
-  Future<Either<Failure, T>> get<T>(String endpoint, {Map<String, dynamic>? queryParams, Options? options, required T Function(dynamic responseData) fromJson}) async {
-    throw UnimplementedError();
-  }
-  
-  @override
-  Future<Either<Failure, T>> post<T>(String endpoint, {Object? data, Map<String, dynamic>? queryParams, Options? options, required T Function(dynamic responseData) fromJson}) async {
-    try {
-      final response = await _dio.post(endpoint,
-        data: data,
-        queryParameters: queryParams,
-        options: options
-      );
-      final responseData = response.data['data'];
-
-      return Right(fromJson(responseData));
-    } on DioException catch(e) {
-      return Left(_handleError(e));
-    } catch(e) {
-      return Left(ServerFailure('Terjadi kesalaahan: $e'));
-    }
-  }
-
-  Failure _handleError(DioException error) {
-    if (error.type == DioExceptionType.connectionTimeout || 
-        error.type == DioExceptionType.receiveTimeout) {
-      NetworkFailure('Koneksi terputus. Periksa internet Anda.');
-    } else if (error.type == DioExceptionType.badResponse) {
-      // Ambil pesan dari API Laravel Anda (jika formatnya JSON { message: "..." })
-      ServerFailure(error.response?.data['message'] ?? 'Response tidak valid dari server');
-    } else if (error.type == DioExceptionType.connectionError) {
-      NetworkFailure('Tidak ada koneksi internet.');
-    }
-
-    // Kembalikan ServerException agar ditangkap seragam oleh Repository
-    return ServerFailure('Terjadi kesalahan sistem.');
+    dio.interceptors.add(authInterceptor);
+    dio.interceptors.add(logInterceptor
+      // LogInterceptor(
+      //   request: ApiConstants.isDev,
+      //   requestHeader: ApiConstants.isDev,
+      //   requestBody: ApiConstants.isDev,
+      //   responseHeader: ApiConstants.isDev,
+      //   responseBody: ApiConstants.isDev,
+      //   error: ApiConstants.isDev
+      // )
+    );
   }
 }

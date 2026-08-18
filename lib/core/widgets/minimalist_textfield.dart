@@ -49,7 +49,7 @@ class _MinimalistTextfieldState extends State<MinimalistTextfield> {
       obscureText: _obscureText,
       validator: widget.validator,
       onEditingComplete: widget.onEditingComplete,
-      autovalidateMode: AutovalidateMode.onUserInteractionIfError,
+      autovalidateMode: .onUserInteractionIfError,
       decoration: InputDecoration(
         hintText: widget.hintText,
         errorText: widget.errorText,

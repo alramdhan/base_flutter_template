@@ -1,5 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:login_biometrics_app/core/helpers/secure_storage_keys.dart';
+import 'package:login_biometrics_app/core/utils/secure_storage_keys.dart';
 
 abstract class SecureStorageHelper {
   Future<void> saveAuthToken(String token);

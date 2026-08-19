@@ -1,5 +1,5 @@
-import 'package:login_biometrics_app/features/auth/data/models/user_model.dart';
+import 'package:login_biometrics_app/features/auth/data/models/auth_response_model.dart';
 
 abstract class AuthRemoteDataSource {
-  Future<UserModel> login(String login, String password);
+  Future<AuthResponseModel> login(String login, String password);
 }

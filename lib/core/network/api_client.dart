@@ -37,8 +37,7 @@ class ApiClientImpl implements ApiClient {
 
       return fromJson(responseData);
     } on DioException catch(e) {
-      _throwException(e);
-      throw const ServerException(message: "");
+      throw _throwException(e);
     } catch(e) {
       throw ServerException(message: 'Terjadi kesalaahan: $e');
     }
@@ -57,25 +56,24 @@ class ApiClientImpl implements ApiClient {
 
       return fromJson(responseData);
     } on DioException catch(e) {
-      _throwException(e);
-      throw const ServerException(message: "");
+      throw _throwException(e);
     } catch(e) {
       throw ServerException(message: 'Terjadi kesalaahan: $e');
     }
   }
 
-  void _throwException(DioException error) {
+  Exception _throwException(DioException error) {
     if (error.type == DioExceptionType.connectionTimeout || 
         error.type == DioExceptionType.receiveTimeout) {
-      throw NetworkException('Koneksi terputus. Periksa internet Anda.');
+      return NetworkException('Koneksi terputus. Periksa internet Anda.');
     } else if (error.type == DioExceptionType.badResponse) {
       // Ambil pesan dari API Laravel Anda (jika formatnya JSON { message: "..." })
-      throw ServerException(message: error.response?.data['message'] ?? 'Response tidak valid dari server');
+      return ServerException(message: error.response?.data['message'] ?? 'Response tidak valid dari server');
     } else if (error.type == DioExceptionType.connectionError) {
-      throw NetworkException('Tidak ada koneksi internet.');
+      return NetworkException('Tidak ada koneksi internet.');
     }
 
     // Kembalikan ServerException agar ditangkap seragam oleh Repository
-    throw ServerException(message: 'Terjadi kesalahan sistem.');
+    return ServerException(message: 'Terjadi kesalahan sistem.');
   }
 }

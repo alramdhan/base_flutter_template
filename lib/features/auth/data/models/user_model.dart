@@ -1,18 +1,20 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:login_biometrics_app/features/auth/domain/entities/user.dart';
 
 part 'user_model.g.dart';
 
-@JsonSerializable(fieldRename: FieldRename.snake)
-class UserModel extends User {
+@JsonSerializable(createToJson: false, fieldRename: FieldRename.snake)
+class UserModel {
+  final int id;
+  final String username;
+  final String email;
+  final String name;
+
   const UserModel({
-    required super.id,
-    required super.username,
-    required super.email,
-    required super.name,
-    required super.accessToken,
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.username,
   });
   
   factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
-  Map<String, dynamic> toJson() => _$UserModelToJson(this);
 }

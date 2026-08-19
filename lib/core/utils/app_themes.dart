@@ -39,16 +39,16 @@ class AppThemes {
       // Konfigurasi Default TextFormField (Minimalis seperti sebelumnya)
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: Colors.grey.shade200,
-        hintStyle: TextStyle(color: Colors.grey.shade500),
+        fillColor: Colors.blueGrey.shade50,
+        hintStyle: TextStyle(color: Colors.grey.shade700),
         contentPadding: const .symmetric(horizontal: 20, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: .circular(14),
-          borderSide: .none,
+          borderSide: BorderSide(color: Colors.blueGrey.shade100),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: .circular(14),
-          borderSide: .none,
+          borderSide: BorderSide(color: Colors.blueGrey.shade100),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: .circular(14),
@@ -62,7 +62,7 @@ class AppThemes {
 
       textSelectionTheme: TextSelectionThemeData(
         cursorColor: AppColors.primary,
-        selectionColor: Colors.purpleAccent.shade100,
+        selectionColor: AppColors.secondary,
         selectionHandleColor: Colors.deepPurple
       ),
 
@@ -105,8 +105,8 @@ class AppThemes {
       ),
       iconButtonTheme: IconButtonThemeData(
         style: IconButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
+          // backgroundColor: AppColors.primary,
+          // foregroundColor: Colors.white,
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: .circular(14)
@@ -143,7 +143,97 @@ class AppThemes {
         error: AppColors.danger,
       ),
 
-      // (Anda bisa menambahkan konfigurasi spesifik dark mode di sini)
+      // Konfigurasi AppBar
+      appBarTheme: const AppBarTheme(
+        backgroundColor: AppColors.surfaceDark,
+        foregroundColor: AppColors.textPrimaryVariant, // Warna icon/teks
+        elevation: 0,
+        centerTitle: true,
+        iconTheme: IconThemeData(color: AppColors.textPrimaryVariant),
+        titleTextStyle: TextStyle(
+          color: AppColors.textPrimaryVariant,
+          fontSize: 18,
+          fontWeight: .w600,
+        ),
+      ),
+
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: AppColors.secondary,
+        selectionColor: AppColors.primary,
+        selectionHandleColor: Colors.deepPurple
+      ),
+
+      // Konfigurasi Default TextFormField (Minimalis seperti sebelumnya)
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: Colors.blueGrey.shade900,
+        hintStyle: TextStyle(color: Colors.grey.shade400),
+        contentPadding: const .symmetric(horizontal: 20, vertical: 14),
+        border: OutlineInputBorder(
+          borderRadius: .circular(14),
+          borderSide: BorderSide(color: Colors.blueGrey.shade800),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: .circular(14),
+          borderSide: BorderSide(color: Colors.blueGrey.shade800),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: .circular(14),
+          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: .circular(14),
+          borderSide: const BorderSide(color: AppColors.danger, width: 1.5),
+        ),
+      ),
+
+      // Konfigurasi Default Button
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          padding: const .symmetric(vertical: 12),
+          backgroundColor: AppColors.primary,
+          foregroundColor: Colors.white,
+          elevation: 0,
+          disabledBackgroundColor: Colors.grey.shade300,
+          disabledForegroundColor: Colors.grey.shade500,
+          shape: RoundedRectangleBorder(
+            borderRadius: .circular(14)
+          )
+        )
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          padding: const .symmetric(vertical: 12),
+          foregroundColor: AppColors.primary,
+          disabledBackgroundColor: Colors.grey.shade300,
+          disabledForegroundColor: Colors.grey.shade500,
+          side: BorderSide(
+            width: 1.5
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: .circular(14)
+          )
+        )
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          padding: const .symmetric(vertical: 12),
+          foregroundColor: AppColors.primary,
+          shape: RoundedRectangleBorder(
+            borderRadius: .circular(14)
+          )
+        )
+      ),
+      iconButtonTheme: IconButtonThemeData(
+        style: IconButton.styleFrom(
+          // backgroundColor: AppColors.primary,
+          // foregroundColor: Colors.white,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: .circular(14)
+          )
+        ),
+      ),
     );
   }
 }

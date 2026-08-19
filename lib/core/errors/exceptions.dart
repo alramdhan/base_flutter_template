@@ -5,6 +5,12 @@ class ServerException implements Exception {
   const ServerException({required this.message, this.statusCode});
 }
 
+class NetworkException implements Exception {
+  final String message;
+  
+  const NetworkException([this.message = 'Tidak ada koneksi internet']);
+}
+
 class CacheException implements Exception {
   final String message;
 

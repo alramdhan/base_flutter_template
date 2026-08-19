@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
-import 'package:dartz/dartz.dart';
-import 'package:login_biometrics_app/core/errors/failures.dart';
+import 'package:login_biometrics_app/core/errors/exceptions.dart';
+import 'package:login_biometrics_app/core/network/dio_client.dart';
 
 abstract class ApiClient {
-  Future<Either<Failure, T>> post<T>(
+  Future<T> post<T>(
     String endpoint, {
       Object? data,
       Map<String, dynamic>? queryParams,
@@ -11,7 +11,7 @@ abstract class ApiClient {
       required T Function(dynamic responseData) fromJson
     }
   );
-  Future<Either<Failure, T>> get<T>(
+  Future<T> get<T>(
     String endpoint, {
       Map<String, dynamic>? queryParams,
       Options? options,
@@ -21,59 +21,61 @@ abstract class ApiClient {
 }
 
 class ApiClientImpl implements ApiClient {
-  final Dio _dio;
+  final DioClient _dc;
 
-  ApiClientImpl(this._dio);
+  ApiClientImpl(this._dc);
   
   @override
-  Future<Either<Failure, T>> get<T>(String endpoint, {Map<String, dynamic>? queryParams, Options? options, required T Function(dynamic responseData) fromJson}) async {
+  Future<T> get<T>(String endpoint, {Map<String, dynamic>? queryParams, Options? options, required T Function(dynamic responseData) fromJson}) async {
     try {
-      final response = await _dio.post(
+      final response = await _dc.dio.post(
         endpoint,
         queryParameters: queryParams,
         options: options
       );
-      final responseData = response.data['data'];
+      final responseData = response.data['data'] ?? response.data;
 
-      return Right(fromJson(responseData));
+      return fromJson(responseData);
     } on DioException catch(e) {
-      return Left(_handleError(e));
+      _throwException(e);
+      throw const ServerException(message: "");
     } catch(e) {
-      return Left(ServerFailure('Terjadi kesalaahan: $e'));
+      throw ServerException(message: 'Terjadi kesalaahan: $e');
     }
   }
   
   @override
-  Future<Either<Failure, T>> post<T>(String endpoint, {Object? data, Map<String, dynamic>? queryParams, Options? options, required T Function(dynamic responseData) fromJson}) async {
+  Future<T> post<T>(String endpoint, {Object? data, Map<String, dynamic>? queryParams, Options? options, required T Function(dynamic responseData) fromJson}) async {
     try {
-      final response = await _dio.post(
+      final response = await _dc.dio.post(
         endpoint,
         data: data,
         queryParameters: queryParams,
         options: options
       );
-      final responseData = response.data['data'];
+      final responseData = response.data['data'] ?? response.data;
 
-      return Right(fromJson(responseData));
+      return fromJson(responseData);
     } on DioException catch(e) {
-      return Left(_handleError(e));
+      _throwException(e);
+      throw const ServerException(message: "");
     } catch(e) {
-      return Left(ServerFailure('Terjadi kesalaahan: $e'));
+      throw ServerException(message: 'Terjadi kesalaahan: $e');
     }
   }
 
-  Failure _handleError(DioException error) {
+  void _throwException(DioException error) {
     if (error.type == DioExceptionType.connectionTimeout || 
         error.type == DioExceptionType.receiveTimeout) {
-      NetworkFailure('Koneksi terputus. Periksa internet Anda.');
+      throw NetworkException('Koneksi terputus. Periksa internet Anda.');
     } else if (error.type == DioExceptionType.badResponse) {
       // Ambil pesan dari API Laravel Anda (jika formatnya JSON { message: "..." })
-      ServerFailure(error.response?.data['message'] ?? 'Response tidak valid dari server');
+      throw ServerException(message: error.response?.data['message'] ?? 'Response tidak valid dari server');
     } else if (error.type == DioExceptionType.connectionError) {
-      NetworkFailure('Tidak ada koneksi internet.');
+      throw NetworkException('Tidak ada koneksi internet.');
     }
 
     // Kembalikan ServerException agar ditangkap seragam oleh Repository
-    return ServerFailure('Terjadi kesalahan sistem.');
+    throw ServerException(message: 'Terjadi kesalahan sistem.');
   }
 }

@@ -2,11 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:login_biometrics_app/core/utils/app_themes.dart';
 import 'package:login_biometrics_app/features/auth/presentation/pages/login_page.dart';
-import 'package:login_biometrics_app/service_locator.dart';
+import 'package:login_biometrics_app/service_locator.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initServiceLocator();
+  await di.init();
   runApp(const MyApp());
 }
 

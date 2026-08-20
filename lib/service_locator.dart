@@ -16,8 +16,16 @@ import 'package:login_biometrics_app/features/auth/data/datasources/auth_remote_
 import 'package:login_biometrics_app/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:login_biometrics_app/features/auth/domain/repositories/auth_repository.dart';
 import 'package:login_biometrics_app/features/auth/domain/usecases/login_usecase.dart';
+import 'package:login_biometrics_app/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:login_biometrics_app/features/auth/presentation/bloc/app_auth/app_auth_bloc.dart';
 import 'package:login_biometrics_app/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:login_biometrics_app/features/biometric_auth/data/datasources/biometric_local_data_source.dart';
+import 'package:login_biometrics_app/features/biometric_auth/data/datasources/biometric_remote_data_source.dart';
+import 'package:login_biometrics_app/features/biometric_auth/data/respositories/biometric_auth_repository_impl.dart';
+import 'package:login_biometrics_app/features/biometric_auth/domain/repositories/biometric_auth_repository.dart';
+import 'package:login_biometrics_app/features/biometric_auth/domain/usecases/register_biometric_usecase.dart';
+import 'package:login_biometrics_app/features/biometric_auth/presentation/bloc/biometric_bloc.dart';
+import 'package:login_biometrics_app/features/main_navigation/cubit/navigation_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -36,15 +44,22 @@ Future<void> init() async {
   sl.registerLazySingleton<SecureStorageHelper>(() => SecureStorageHelperImpl(sl()));
 
   // =========================================================================
-  // BLoC LAYER
+  // BLoC dan Cubit LAYER
   // =========================================================================
+  sl.registerFactory(() => NavigationCubit());
   sl.registerLazySingleton(() => AppAuthBloc(localDatasource: sl()));
-  sl.registerFactory(() => AuthBloc(loginUsecase: sl()));
+  sl.registerFactory(() => AuthBloc(
+    loginUsecase: sl(),
+    logoutUsecase: sl()
+  ));
+  sl.registerLazySingleton(() => BiometricBloc(repository: sl()));
 
   // =========================================================================
   // DOMAIN LAYER (use cases)
   // =========================================================================
   sl.registerLazySingleton(() => LoginUsecase(sl()));
+  sl.registerLazySingleton(() => LogoutUsecase(sl()));
+  sl.registerLazySingleton(() => RegisterBiometricUsecase(sl()));
 
   // =========================================================================
   // DATA LAYER
@@ -54,9 +69,15 @@ Future<void> init() async {
     remoteDataSource: sl(),
     localDatasource: sl()
   ));
+  sl.registerLazySingleton<BiometricAuthRepository>(() => BiometricAuthRepositoryImpl(
+    localDatasource: sl(),
+    remoteDatasource: sl()
+  ));
   // Data sources
   sl.registerLazySingleton<AuthLocalDataSource>(() => AuthLocalDataSourceImpl(secureStorage: sl()));
   sl.registerLazySingleton<AuthRemoteDataSource>(() => AuthRemoteDataSourceImpl(apiClient: sl()));
+  sl.registerLazySingleton<BiometricLocalDataSource>(() => BiometricLocalDataSourceImpl(secureStorage: sl()));
+  sl.registerLazySingleton<BiometricRemoteDataSource>(() => BiometricRemoteDataSourceImpl(sl()));
 
   // =========================================================================
   // CORE & EXTERNAL

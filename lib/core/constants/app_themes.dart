@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:login_biometrics_app/core/utils/app_colors.dart';
+import 'package:login_biometrics_app/core/constants/app_colors.dart';
 
 class AppThemes {
   AppThemes._();
+
+  static const textSelectionTheme = TextSelectionThemeData(
+    cursorColor: AppColors.primary,
+    selectionColor: AppColors.secondary,
+    selectionHandleColor: Colors.deepPurple
+  );
 
   // -------------------------------------------------------------
   // LIGHT THEME CONFIGURATION
@@ -60,11 +66,7 @@ class AppThemes {
         ),
       ),
 
-      textSelectionTheme: TextSelectionThemeData(
-        cursorColor: AppColors.primary,
-        selectionColor: AppColors.secondary,
-        selectionHandleColor: Colors.deepPurple
-      ),
+      textSelectionTheme: textSelectionTheme,
 
       // Konfigurasi Default Button
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -86,9 +88,7 @@ class AppThemes {
           foregroundColor: AppColors.primary,
           disabledBackgroundColor: Colors.grey.shade300,
           disabledForegroundColor: Colors.grey.shade500,
-          side: BorderSide(
-            width: 1.5
-          ),
+          side: const BorderSide(width: 1.5),
           shape: RoundedRectangleBorder(
             borderRadius: .circular(14)
           )
@@ -112,6 +112,15 @@ class AppThemes {
             borderRadius: .circular(14)
           )
         ),
+      ),
+
+      // Konfigurasi Checkbox
+      checkboxTheme: const CheckboxThemeData(
+        checkColor: WidgetStatePropertyAll(AppColors.secondary),
+        side: BorderSide(color: Colors.grey),
+        shape: RoundedRectangleBorder(
+          borderRadius: .all(.circular(5))
+        )
       ),
 
       // Konfigurasi Default Card
@@ -157,11 +166,7 @@ class AppThemes {
         ),
       ),
 
-      textSelectionTheme: TextSelectionThemeData(
-        cursorColor: AppColors.secondary,
-        selectionColor: AppColors.primary,
-        selectionHandleColor: Colors.deepPurple
-      ),
+      textSelectionTheme: textSelectionTheme,
 
       // Konfigurasi Default TextFormField (Minimalis seperti sebelumnya)
       inputDecorationTheme: InputDecorationTheme(
@@ -207,9 +212,7 @@ class AppThemes {
           foregroundColor: AppColors.primary,
           disabledBackgroundColor: Colors.grey.shade300,
           disabledForegroundColor: Colors.grey.shade500,
-          side: BorderSide(
-            width: 1.5
-          ),
+          side: const BorderSide(width: 1.5),
           shape: RoundedRectangleBorder(
             borderRadius: .circular(14)
           )

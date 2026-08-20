@@ -6,6 +6,7 @@ import 'package:login_biometrics_app/core/widgets/minimalist_button.dart';
 import 'package:login_biometrics_app/core/widgets/minimalist_textfield.dart';
 import 'package:login_biometrics_app/features/auth/presentation/bloc/app_auth/app_auth_bloc.dart';
 import 'package:login_biometrics_app/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:login_biometrics_app/features/auth/presentation/widgets/remember_me.dart';
 import 'package:login_biometrics_app/service_locator.dart';
 
 class LoginPage extends StatefulWidget {
@@ -19,6 +20,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   final _emailController = TextEditingController();
   final _pwdController = TextEditingController();
   bool hasBiometricEnabled = false;
+  bool rememberMe = false;
 
   late AnimationController _shakeController;
 
@@ -45,9 +47,16 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
     FocusScope.of(context).unfocus();
     final email = _emailController.text;
     final pwd = _pwdController.text;
+    print("remember $rememberMe");
 
     // Panggil event BLoC
-    context.read<AuthBloc>().add(LoginRequested(login: email, password: pwd));
+    context.read<AuthBloc>().add(
+      LoginRequested(
+        login: email,
+        password: pwd,
+        isRememberMe: rememberMe
+      )
+    );
   }
 
   void _onBiometricPressed() {
@@ -72,6 +81,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
         );
         break;
 
+      case Unauthenticated():
       case AuthInitial():
       case AuthLoading():
         break;
@@ -155,6 +165,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                       return null;
                     },
                   ),
+                  RememberMeWidget(onChanged: (value) => rememberMe = value ?? false),
                   const SizedBox(height: 8),
                   MinimalistButton(
                     width: 500,
@@ -197,7 +208,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
             foregroundColor: Colors.white
           ),
           padding: const .all(10),
-          icon: Icon(Icons.fingerprint, size: 35),
+          icon: const Icon(Icons.fingerprint, size: 35),
           onPressed: _onBiometricPressed,
         ).animate()
           .fadeIn(delay: 600.ms)

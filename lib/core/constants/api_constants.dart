@@ -7,7 +7,12 @@ class ApiConstants {
   static const String devBaseUrl = '';
   static const String prodBaseUrl = '';
 
-  static String get baseUrl => isDev ? devBaseUrl : prodBaseUrl;
+  static const String prefixBaseUrl = '/api/v1';
+
+  static final Uri uri = Uri.https(isDev ? devBaseUrl : prodBaseUrl, prefixBaseUrl);
+
+  // static String get baseUrl => "${isDev ? devBaseUrl : prodBaseUrl}$prefixBaseUrl";
+  static String get baseUrl => uri.toString();
 
   static const int connectTimeout = 30000;
   static const int receiveTimeout = 30000;
@@ -19,4 +24,6 @@ class Endpoints {
   const Endpoints._();
 
   final String login = "/login";
+  final String logout = "/logout";
+  final String registerBiometric = "/biometric/register";
 }

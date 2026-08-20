@@ -2,7 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:login_biometrics_app/core/router/grouter_refresh_stream.dart';
 import 'package:login_biometrics_app/features/auth/presentation/bloc/app_auth/app_auth_bloc.dart';
 import 'package:login_biometrics_app/features/auth/presentation/pages/login_page.dart';
-import 'package:login_biometrics_app/features/home/presentation/home_page.dart';
+import 'package:login_biometrics_app/features/main_navigation/presentation/main_page.dart';
 
 class AppRouter {
   final AppAuthBloc appAuthBloc;
@@ -23,19 +23,23 @@ class AppRouter {
       }
 
       if(authState == AuthStatus.authenticted && isGoingToLogin) {
-        return '/home';
+        return '/main';
       }
 
       return null;
     },
     routes: [
       GoRoute(
+        path: '/',
+        builder: (context, state) => const LoginPage()
+      ),
+      GoRoute(
         path: '/login',
         builder: (context, state) => const LoginPage()
       ),
       GoRoute(
-        path: '/home',
-        builder: (context, state) => const MyHomePage(title: "Home")
+        path: '/main',
+        builder: (context, state) => const MainNavPage()
       ),
     ]
   );

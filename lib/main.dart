@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:login_biometrics_app/core/router/app_router.dart';
 import 'package:login_biometrics_app/core/constants/app_themes.dart';
 import 'package:login_biometrics_app/features/auth/presentation/bloc/app_auth/app_auth_bloc.dart';
+import 'package:login_biometrics_app/features/biometric_auth/presentation/bloc/biometric_bloc.dart';
 import 'package:login_biometrics_app/features/main_navigation/cubit/navigation_cubit.dart';
 import 'package:login_biometrics_app/service_locator.dart' as di;
 
@@ -26,6 +27,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<NavigationCubit>(
           create: (_) => di.sl<NavigationCubit>(),
+        ),
+        BlocProvider<BiometricBloc>(
+          create: (_) => di.sl<BiometricBloc>()
         )
       ],
       child: Builder(

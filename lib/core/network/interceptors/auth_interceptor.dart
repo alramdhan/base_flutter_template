@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:login_biometrics_app/core/helpers/secure_storage_helper.dart';
+import 'package:login_biometrics_app/core/services/secure_storage_service.dart';
 import 'package:login_biometrics_app/features/auth/presentation/bloc/app_auth/app_auth_bloc.dart';
 import 'package:login_biometrics_app/service_locator.dart';
 
 class AuthInterceptor extends Interceptor {
-  final SecureStorageHelper secureStorage;
+  final SecureStorageService secureStorage;
 
   AuthInterceptor({required this.secureStorage});
 

@@ -3,7 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:login_biometrics_app/core/constants/api_constants.dart';
-import 'package:login_biometrics_app/core/helpers/secure_storage_helper.dart';
+import 'package:login_biometrics_app/core/services/secure_storage_service.dart';
 import 'package:login_biometrics_app/core/network/interceptors/auth_interceptor.dart';
 import 'package:login_biometrics_app/core/network/api_client.dart';
 import 'package:login_biometrics_app/core/network/dio_client.dart';
@@ -41,7 +41,7 @@ Future<void> init() async {
       iOptions: iosOptions
     );
   });
-  sl.registerLazySingleton<SecureStorageHelper>(() => SecureStorageHelperImpl(sl()));
+  sl.registerLazySingleton<SecureStorageService>(() => SecureStorageServiceImpl(sl()));
 
   // =========================================================================
   // BLoC dan Cubit LAYER

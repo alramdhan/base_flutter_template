@@ -1,21 +1,22 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:login_biometrics_app/core/helpers/secure_storage_keys.dart';
+import 'package:login_biometrics_app/core/constants/secure_storage_keys.dart';
+import 'package:login_biometrics_app/core/utils/app_logger.dart';
 
-abstract class SecureStorageHelper {
+abstract class SecureStorageService {
   Future<void> saveAuthToken(String token);
   Future<String?> getAuthToken();
   Future<void> deleteAuthToken();
   Future<void> setKey(String key, String value);
   Future<String?> getKey(String key);
-  Future<void> safeBiometricStatus(bool isEnabled);
-  Future<bool> getBiometricStatus();
+  Future<void> setBiometricStatus(bool isEnabled);
+  Future<bool> getBiometricState();
   Future<void> clearAllData();
 }
 
-class SecureStorageHelperImpl implements SecureStorageHelper {
+class SecureStorageServiceImpl implements SecureStorageService {
   final FlutterSecureStorage _storage;
 
-  SecureStorageHelperImpl(this._storage);
+  SecureStorageServiceImpl(this._storage);
   
   @override
   Future<void> clearAllData() async {
@@ -24,6 +25,7 @@ class SecureStorageHelperImpl implements SecureStorageHelper {
   
   @override
   Future<void> deleteAuthToken() async {
+    AppLogger.instance.info("access token deleted.");
     await _storage.delete(key: SecureStorageKeys.authToken);
   }
   
@@ -33,9 +35,10 @@ class SecureStorageHelperImpl implements SecureStorageHelper {
   }
   
   @override
-  Future<bool> getBiometricStatus() async {
+  Future<bool> getBiometricState() async {
     final status = await _storage.read(key: SecureStorageKeys.hasBiometricEnabled);
-    return status == 'true';
+    final hasAuthToken = await getKey(SecureStorageKeys.biometricPrivateKey);
+    return status == 'true' && (hasAuthToken != null && hasAuthToken.isNotEmpty);
   }
   
   @override
@@ -44,7 +47,7 @@ class SecureStorageHelperImpl implements SecureStorageHelper {
   }
   
   @override
-  Future<void> safeBiometricStatus(bool isEnabled) async {
+  Future<void> setBiometricStatus(bool isEnabled) async {
     await _storage.write(key: SecureStorageKeys.hasBiometricEnabled, value: isEnabled.toString());
   }
   

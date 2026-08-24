@@ -24,7 +24,8 @@ class BiometricAuthRepositoryImpl implements BiometricAuthRepository {
           deviceId: deviceId, deviceModel: deviceModel, publicKey: publicKey, pin: pin
         )
       );
-
+      localDatasource.setBiometricEnable();
+      
       return const Right(true);
     } on ServerException catch(e) {
       return Left(ServerFailure(e.message));

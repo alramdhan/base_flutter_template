@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:login_biometrics_app/core/helpers/secure_storage_helper.dart';
-import 'package:login_biometrics_app/core/widgets/minimalist_button.dart';
-import 'package:login_biometrics_app/core/widgets/minimalist_textfield.dart';
+import 'package:login_biometrics_app/core/services/secure_storage_service.dart';
+import 'package:login_biometrics_app/core/components/minimalist_button.dart';
+import 'package:login_biometrics_app/core/components/minimalist_textfield.dart';
 import 'package:login_biometrics_app/features/auth/presentation/bloc/app_auth/app_auth_bloc.dart';
 import 'package:login_biometrics_app/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:login_biometrics_app/features/auth/presentation/widgets/biometric_button_widget.dart';
 import 'package:login_biometrics_app/features/auth/presentation/widgets/remember_me.dart';
+import 'package:login_biometrics_app/features/biometric_auth/presentation/bloc/biometric_bloc.dart';
 import 'package:login_biometrics_app/service_locator.dart';
 
 class LoginPage extends StatefulWidget {
@@ -19,8 +21,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixin {
   final _emailController = TextEditingController();
   final _pwdController = TextEditingController();
-  bool hasBiometricEnabled = false;
   bool rememberMe = false;
+  bool hasBiometricEnabled = false;
 
   late AnimationController _shakeController;
 
@@ -40,7 +42,8 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   }
 
   void _initLocalStorage() async {
-    hasBiometricEnabled = await sl<SecureStorageHelper>().getBiometricStatus();
+    hasBiometricEnabled = await sl<SecureStorageService>().getBiometricState();
+    print("has bio metri $hasBiometricEnabled");
   }
 
   void _onLoginPressed(BuildContext context) {
@@ -57,10 +60,6 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
         isRememberMe: rememberMe
       )
     );
-  }
-
-  void _onBiometricPressed() {
-
   }
 
   void _authBlocListener(BuildContext context, AuthState state) {
@@ -166,7 +165,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                     },
                   ),
                   RememberMeWidget(onChanged: (value) => rememberMe = value ?? false),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 4),
                   MinimalistButton(
                     width: 500,
                     label: "Masuk",
@@ -177,43 +176,18 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                     .scale(),
                   const SizedBox(height: 8),
                   if(hasBiometricEnabled)
-                    _buildFingerPrintLogin()
+                    BiometricButtonWidget(
+                      context,
+                      onBiometricAuth: (isAuth) {
+                        if(isAuth) context.read<BiometricBloc>().add(VerifyBiometricEvent());
+                      },
+                    )
                 ],
               ),
             )
           ],
         );
       },
-    );
-  }
-
-  Widget _buildFingerPrintLogin() {
-    return Column(
-      spacing: 16,
-      children: [
-        Row(
-          children: [
-            Expanded(child: Divider(color: Colors.grey.shade300, thickness: 1)),
-            Padding(
-              padding: const .symmetric(horizontal: 16),
-              child: Text('ATAU', style: TextStyle(color: Colors.grey.shade500, fontWeight: .w600)),
-            ),
-            Expanded(child: Divider(color: Colors.grey.shade300, thickness: 1)),
-          ],
-        ).animate().fadeIn(delay: 700.ms),
-        const SizedBox(height: 8),
-        IconButton(
-          style: IconButton.styleFrom(
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            foregroundColor: Colors.white
-          ),
-          padding: const .all(10),
-          icon: const Icon(Icons.fingerprint, size: 35),
-          onPressed: _onBiometricPressed,
-        ).animate()
-          .fadeIn(delay: 600.ms)
-          .scale(),
-      ],
     );
   }
 }

@@ -1,5 +1,5 @@
-import 'package:login_biometrics_app/core/helpers/secure_storage_helper.dart';
-import 'package:login_biometrics_app/core/helpers/secure_storage_keys.dart';
+import 'package:login_biometrics_app/core/services/secure_storage_service.dart';
+import 'package:login_biometrics_app/core/constants/secure_storage_keys.dart';
 
 abstract class AuthLocalDataSource {
   Future<void> saveToken(String token);
@@ -8,7 +8,7 @@ abstract class AuthLocalDataSource {
 }
 
 class AuthLocalDataSourceImpl implements AuthLocalDataSource {
-  final SecureStorageHelper secureStorage;
+  final SecureStorageService secureStorage;
 
   AuthLocalDataSourceImpl({required this.secureStorage});
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:login_biometrics_app/core/widgets/minimalist_checkbox.dart';
+import 'package:login_biometrics_app/core/components/minimalist_checkbox.dart';
 
 class RememberMeWidget extends StatefulWidget {
   const RememberMeWidget({

@@ -21,7 +21,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<bool> logout() {
     return apiClient.post<bool>(
-      ApiConstants.endpoints.login,
+      ApiConstants.endpoints.logout,
       // data: request.toJson(),
       fromJson: (responseData) => true,
     );

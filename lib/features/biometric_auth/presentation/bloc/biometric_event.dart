@@ -5,6 +5,8 @@ sealed class BiometricEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+class VerifyBiometricEvent extends BiometricEvent {}
+
 class RegisterBiometricEvent extends BiometricEvent {
   final String deviceId;
   final String deviceModel;

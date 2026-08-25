@@ -26,4 +26,5 @@ class Endpoints {
   final String login = "/login";
   final String logout = "/logout";
   final String registerBiometric = "/biometric/register";
+  final String verifyBiometric = "/login/biometric";
 }

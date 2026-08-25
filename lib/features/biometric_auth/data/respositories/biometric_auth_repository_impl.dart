@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:login_biometrics_app/core/errors/exceptions.dart';
 import 'package:login_biometrics_app/core/errors/failures.dart';
+import 'package:login_biometrics_app/features/auth/domain/entities/user.dart';
 import 'package:login_biometrics_app/features/biometric_auth/data/datasources/biometric_local_data_source.dart';
 import 'package:login_biometrics_app/features/biometric_auth/data/datasources/biometric_remote_data_source.dart';
 import 'package:login_biometrics_app/features/biometric_auth/data/models/register_biometric_request.dart';
@@ -32,6 +33,21 @@ class BiometricAuthRepositoryImpl implements BiometricAuthRepository {
     } on NetworkException catch(e) {
       return Left(NetworkFailure(e.message));
     } catch(e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, User>> verifyBiometric(String pubKey) async {
+    try {
+      final responseModel = await remoteDatasource.verifyBiometric();
+
+      return Right(responseModel.toEntity());
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } on NetworkException catch (e) {
+      return Left(NetworkFailure(e.message));
+    } catch (e) {
       return Left(ServerFailure(e.toString()));
     }
   }

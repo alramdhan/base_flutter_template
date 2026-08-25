@@ -4,6 +4,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:login_biometrics_app/core/constants/app_colors.dart';
+import 'package:login_biometrics_app/core/helpers/dialog_helper.dart';
 import 'package:login_biometrics_app/features/auth/presentation/bloc/app_auth/app_auth_bloc.dart';
 import 'package:login_biometrics_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:login_biometrics_app/features/biometric_auth/presentation/bloc/biometric_bloc.dart';
@@ -36,6 +37,20 @@ class _SettingPageState extends State<SettingPage> {
       final iosInfo = await dip.iosInfo;
       deviceId = iosInfo.identifierForVendor ?? "";
       deviceModel = iosInfo.model;
+    }
+  }
+
+  Future<void> _onLogoutPressed(BuildContext context) async {
+    final bool? isConfirm = await DialogHelper.showConfirmationDialog(
+      context: context,
+      title: "Yakin",
+      message: "Apakah anda yakin ingin keluar dari aplikasi?",
+      isDestructive: true
+    );
+
+    if(isConfirm == true) {
+      if(!context.mounted) return;
+      context.read<AuthBloc>().add(LogoutRequested());
     }
   }
 
@@ -78,9 +93,7 @@ class _SettingPageState extends State<SettingPage> {
                   return ListTile(
                     title: const Text("Keluar"),
                     leading: const Icon(Icons.exit_to_app, color: AppColors.danger),
-                    onTap: () {
-                      context.read<AuthBloc>().add(LogoutRequested());
-                    },
+                    onTap: () => _onLogoutPressed(context),
                   );
                 }
               )

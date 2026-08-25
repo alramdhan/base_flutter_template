@@ -24,6 +24,7 @@ import 'package:login_biometrics_app/features/biometric_auth/data/datasources/bi
 import 'package:login_biometrics_app/features/biometric_auth/data/respositories/biometric_auth_repository_impl.dart';
 import 'package:login_biometrics_app/features/biometric_auth/domain/repositories/biometric_auth_repository.dart';
 import 'package:login_biometrics_app/features/biometric_auth/domain/usecases/register_biometric_usecase.dart';
+import 'package:login_biometrics_app/features/biometric_auth/domain/usecases/verify_biometric_usecase.dart';
 import 'package:login_biometrics_app/features/biometric_auth/presentation/bloc/biometric_bloc.dart';
 import 'package:login_biometrics_app/features/main_navigation/cubit/navigation_cubit.dart';
 
@@ -52,7 +53,7 @@ Future<void> init() async {
     loginUsecase: sl(),
     logoutUsecase: sl()
   ));
-  sl.registerLazySingleton(() => BiometricBloc(repository: sl()));
+  sl.registerLazySingleton(() => BiometricBloc(registerBiometricUseCase: sl()));
 
   // =========================================================================
   // DOMAIN LAYER (use cases)
@@ -60,6 +61,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => LoginUsecase(sl()));
   sl.registerLazySingleton(() => LogoutUsecase(sl()));
   sl.registerLazySingleton(() => RegisterBiometricUsecase(sl()));
+  sl.registerLazySingleton(() => VerifyBiometricUsecase(sl()));
 
   // =========================================================================
   // DATA LAYER

@@ -24,5 +24,4 @@ class BiometricLocalDataSourceImpl implements BiometricLocalDataSource {
   Future<void> setBiometricEnable() async {
     await secureStorage.setBiometricStatus(true);
   }
-  
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:logger/web.dart';
+import 'package:logger/logger.dart';
 
 class AppLogger {
   AppLogger._privateConstructor();

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:login_biometrics_app/core/services/secure_storage_service.dart';
 import 'package:login_biometrics_app/core/components/minimalist_button.dart';
 import 'package:login_biometrics_app/core/components/minimalist_textfield.dart';
 import 'package:login_biometrics_app/features/auth/presentation/bloc/app_auth/app_auth_bloc.dart';
@@ -22,14 +21,15 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   final _emailController = TextEditingController();
   final _pwdController = TextEditingController();
   bool rememberMe = false;
-  bool hasBiometricEnabled = false;
+  // bool hasBiometricEnabled = false;
 
   late AnimationController _shakeController;
 
   @override
   void initState() {
-    _initLocalStorage();
+    // _initLocalStorage();
     super.initState();
+    context.read<BiometricBloc>().add(BiometricStatusEvent());
     _shakeController = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
   }
 
@@ -41,10 +41,10 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
     _shakeController.dispose();
   }
 
-  void _initLocalStorage() async {
-    hasBiometricEnabled = await sl<SecureStorageService>().getBiometricState();
-    print("has bio metri $hasBiometricEnabled");
-  }
+  // void _initLocalStorage() async {
+  //   hasBiometricEnabled = await sl<SecureStorageService>().getBiometricState();
+  //   print("has bio metri $hasBiometricEnabled");
+  // }
 
   void _onLoginPressed(BuildContext context) {
     FocusScope.of(context).unfocus();
@@ -175,13 +175,27 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                     .fadeIn(delay: 600.ms)
                     .scale(),
                   const SizedBox(height: 8),
-                  if(hasBiometricEnabled)
-                    BiometricButtonWidget(
-                      context,
-                      onBiometricAuth: (isAuth) {
-                        if(isAuth) context.read<BiometricBloc>().add(VerifyBiometricEvent());
-                      },
-                    )
+                  BlocBuilder<BiometricBloc, BiometricState>(
+                    buildWhen: (previous, current) => current is BiometricStatusLoaded,
+                    builder: (context, state) {
+                      bool hasBiometricEnabled = false;
+
+                      if(state is BiometricStatusLoaded) {
+                        hasBiometricEnabled = state.isBiometricEnabled;
+                      }
+
+                      if (hasBiometricEnabled) {
+                        return BiometricButtonWidget(
+                          context,
+                          onBiometricAuth: (isAuth) {
+                            if(isAuth) context.read<BiometricBloc>().add(VerifyBiometricEvent());
+                          },
+                        );
+                      }
+
+                      return const SizedBox();
+                    }
+                  ),
                 ],
               ),
             )

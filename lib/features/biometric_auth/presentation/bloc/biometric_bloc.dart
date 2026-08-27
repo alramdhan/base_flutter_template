@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:login_biometrics_app/core/services/secure_storage_service.dart';
 import 'package:login_biometrics_app/features/biometric_auth/domain/usecases/register_biometric_usecase.dart';
+import 'package:login_biometrics_app/service_locator.dart';
 
 part 'biometric_event.dart';
 part 'biometric_state.dart';
@@ -9,6 +11,15 @@ class BiometricBloc extends Bloc<BiometricEvent, BiometricState> {
   final RegisterBiometricUsecase registerBiometricUseCase;
 
   BiometricBloc({required this.registerBiometricUseCase}) : super(BiometricInitial()) {
+    on<BiometricStatusEvent>((event, emit) async {
+      try {
+        final isEnabled = await sl<SecureStorageService>().getBiometricState();
+
+        emit(BiometricStatusLoaded(isEnabled));
+      } catch (e) {
+        emit(BiometricStatusLoaded(false));
+      }
+    });
     on<RegisterBiometricEvent>(_onRegisBiometric);
     on<VerifyBiometricEvent>(_onVerifyBiometric);
   }

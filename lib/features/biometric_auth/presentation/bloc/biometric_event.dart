@@ -1,6 +1,7 @@
 part of 'biometric_bloc.dart';
 
 sealed class BiometricEvent extends Equatable {
+  const BiometricEvent();
   @override
   List<Object?> get props => [];
 }
@@ -12,7 +13,7 @@ class RegisterBiometricEvent extends BiometricEvent {
   final String deviceModel;
   final String pin;
 
-  RegisterBiometricEvent(
+  const RegisterBiometricEvent(
     this.deviceId,
     this.deviceModel,
     this.pin
@@ -21,3 +22,5 @@ class RegisterBiometricEvent extends BiometricEvent {
   @override
   List<Object?> get props => [deviceId, deviceModel, pin];
 }
+
+final class BiometricStatusEvent extends BiometricEvent {}

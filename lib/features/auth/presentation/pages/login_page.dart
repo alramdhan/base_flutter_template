@@ -8,6 +8,7 @@ import 'package:login_biometrics_app/features/auth/presentation/bloc/auth_bloc.d
 import 'package:login_biometrics_app/features/auth/presentation/widgets/biometric_button_widget.dart';
 import 'package:login_biometrics_app/features/auth/presentation/widgets/remember_me.dart';
 import 'package:login_biometrics_app/features/biometric_auth/presentation/bloc/biometric_bloc.dart';
+import 'package:login_biometrics_app/features/main_navigation/cubit/navigation_cubit.dart';
 import 'package:login_biometrics_app/service_locator.dart';
 
 class LoginPage extends StatefulWidget {
@@ -68,7 +69,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Selamat data, ${user.name}'))
         );
-
+        context.read<NavigationCubit>().reset();
         context.read<AppAuthBloc>().add(AppAuthLoggedIn());
         break;
       case AuthFailure(message: final msg):

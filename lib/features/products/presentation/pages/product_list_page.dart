@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:login_biometrics_app/core/utils/app_logger.dart';
 import 'package:login_biometrics_app/features/products/presentation/bloc/product_bloc.dart';
 import 'package:login_biometrics_app/features/products/presentation/widgets/product_grid_view.dart';
 import 'package:login_biometrics_app/service_locator.dart';
@@ -30,6 +31,7 @@ class _ProductListView extends StatelessWidget {
         }
 
         if (state is ProductError) {
+          AppLogger.instance.error("loadste ${state.message}");
           return _ErrorView(
             message: state.message,
             onRetry: () =>
@@ -42,6 +44,7 @@ class _ProductListView extends StatelessWidget {
         if (loadedState.products.isEmpty) {
           return const _EmptyView();
         }
+
 
         return RefreshIndicator(
           onRefresh: () async {

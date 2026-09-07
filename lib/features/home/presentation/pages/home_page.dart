@@ -1,7 +1,7 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:login_biometrics_app/features/products/presentation/bloc/product_bloc.dart';
+import 'package:login_biometrics_app/core/components/minimalist_textfield.dart';
 import 'package:login_biometrics_app/features/products/presentation/pages/product_list_page.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -61,19 +61,10 @@ class _SearchField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return MinimalistTextfield(
       onChanged: onChanged,
-      decoration: InputDecoration(
-        hintText: 'Cari produk...',
-        prefixIcon: const Icon(Icons.search),
-        filled: true,
-        fillColor: Colors.grey.shade100,
-        contentPadding: const EdgeInsets.symmetric(vertical: 0),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide.none,
-        ),
-      ),
+      hintText: 'Cari produk...',
+      prefixIcon: Icons.search,
     );
   }
 }

@@ -82,17 +82,13 @@ Future<void> init() async {
     localDatasource: sl(),
     remoteDatasource: sl()
   ));
-  sl.registerLazySingleton<ProductRepository>(
-    () => ProductRepositoryImpl(sl()),
-  );
+  sl.registerLazySingleton<ProductRepository>(() => ProductRepositoryImpl(sl()));
   // Data sources
   sl.registerLazySingleton<AuthLocalDataSource>(() => AuthLocalDataSourceImpl(secureStorage: sl()));
   sl.registerLazySingleton<AuthRemoteDataSource>(() => AuthRemoteDataSourceImpl(apiClient: sl()));
   sl.registerLazySingleton<BiometricLocalDataSource>(() => BiometricLocalDataSourceImpl(secureStorage: sl()));
   sl.registerLazySingleton<BiometricRemoteDataSource>(() => BiometricRemoteDataSourceImpl(sl()));
-  sl.registerLazySingleton<ProductRemoteDataSource>(
-    () => ProductRemoteDataSourceImpl(sl()),
-  );
+  sl.registerLazySingleton<ProductRemoteDataSource>(() => ProductRemoteDataSourceImpl(sl()));
 
   // =========================================================================
   // CORE & EXTERNAL

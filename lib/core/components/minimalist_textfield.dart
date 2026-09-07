@@ -9,7 +9,8 @@ class MinimalistTextfield extends StatefulWidget {
     this.isPassword = false,
     this.errorText,
     this.validator,
-    this.onEditingComplete
+    this.onEditingComplete,
+    this.onChanged
   });
 
   final String hintText;
@@ -19,6 +20,7 @@ class MinimalistTextfield extends StatefulWidget {
   final String? errorText;
   final String? Function(String?)? validator;
   final VoidCallback? onEditingComplete;
+  final void Function(String)? onChanged;
 
   @override
   State<MinimalistTextfield> createState() => _MinimalistTextfieldState();
@@ -50,6 +52,7 @@ class _MinimalistTextfieldState extends State<MinimalistTextfield> {
       validator: widget.validator,
       onEditingComplete: widget.onEditingComplete,
       autovalidateMode: .onUserInteractionIfError,
+      onChanged: widget.onChanged,
       decoration: InputDecoration(
         hintText: widget.hintText,
         errorText: widget.errorText,

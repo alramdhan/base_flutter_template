@@ -35,7 +35,7 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
         if (lowStockOnly) 'low_stock': 1,
       },
       fromJson: (responseData) => ProductListResponseModel.fromJson(
-        responseData.data as Map<String, dynamic>,
+        responseData as Map<String, dynamic>,
       ),
     );
   }

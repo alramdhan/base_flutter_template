@@ -5,12 +5,12 @@ import 'package:equatable/equatable.dart';
 class CategoryEntity extends Equatable {
   final int id;
   final String name;
-  final String slug;
+  final String? slug;
 
   const CategoryEntity({
     required this.id,
     required this.name,
-    required this.slug
+    this.slug
   });
 
   @override

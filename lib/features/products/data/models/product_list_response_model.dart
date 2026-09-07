@@ -12,7 +12,7 @@ class ProductListResponseModel extends ProductPageEntity {
   });
 
   factory ProductListResponseModel.fromJson(Map<String, dynamic> json) {
-    final List<dynamic> data = json['data'] as List<dynamic>? ?? [];
+    final List<dynamic> data = json['products'] as List<dynamic>? ?? [];
     final Map<String, dynamic> meta =
         json['meta'] as Map<String, dynamic>? ?? {};
 

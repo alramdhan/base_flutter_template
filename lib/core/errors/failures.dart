@@ -28,3 +28,7 @@ class CacheFailure extends Failure {
 class BiometricFailure extends Failure {
   const BiometricFailure(super.message);
 }
+
+class UnexpectedFailure extends Failure {
+  const UnexpectedFailure(super.message);
+}

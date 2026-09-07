@@ -28,7 +28,7 @@ class ApiClientImpl implements ApiClient {
   @override
   Future<T> get<T>(String endpoint, {Map<String, dynamic>? queryParams, Options? options, required T Function(dynamic responseData) fromJson}) async {
     try {
-      final response = await _dc.dio.post(
+      final response = await _dc.dio.get(
         endpoint,
         queryParameters: queryParams,
         options: options
@@ -65,15 +65,15 @@ class ApiClientImpl implements ApiClient {
   Exception _throwException(DioException error) {
     if (error.type == DioExceptionType.connectionTimeout || 
         error.type == DioExceptionType.receiveTimeout) {
-      return NetworkException('Koneksi terputus. Periksa internet Anda.');
+      return const NetworkException('Koneksi terputus. Periksa internet Anda.');
     } else if (error.type == DioExceptionType.badResponse) {
       // Ambil pesan dari API Laravel Anda (jika formatnya JSON { message: "..." })
       return ServerException(message: error.response?.data['message'] ?? 'Response tidak valid dari server');
     } else if (error.type == DioExceptionType.connectionError) {
-      return NetworkException('Tidak ada koneksi internet.');
+      return const NetworkException('Tidak ada koneksi internet.');
     }
 
     // Kembalikan ServerException agar ditangkap seragam oleh Repository
-    return ServerException(message: 'Terjadi kesalahan sistem.');
+    return const ServerException(message: 'Terjadi kesalahan sistem.');
   }
 }

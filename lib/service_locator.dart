@@ -27,6 +27,11 @@ import 'package:login_biometrics_app/features/biometric_auth/domain/usecases/reg
 import 'package:login_biometrics_app/features/biometric_auth/domain/usecases/verify_biometric_usecase.dart';
 import 'package:login_biometrics_app/features/biometric_auth/presentation/bloc/biometric_bloc.dart';
 import 'package:login_biometrics_app/features/main_navigation/cubit/navigation_cubit.dart';
+import 'package:login_biometrics_app/features/products/data/datasources/product_remote_data_source.dart';
+import 'package:login_biometrics_app/features/products/data/repositories/product_repository_impl.dart';
+import 'package:login_biometrics_app/features/products/domain/repositories/product_repository.dart';
+import 'package:login_biometrics_app/features/products/domain/usecases/get_products.dart';
+import 'package:login_biometrics_app/features/products/presentation/bloc/product_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -54,6 +59,7 @@ Future<void> init() async {
     logoutUsecase: sl()
   ));
   sl.registerLazySingleton(() => BiometricBloc(registerBiometricUseCase: sl()));
+  sl.registerFactory(() => ProductBloc(getProducts: sl()));
 
   // =========================================================================
   // DOMAIN LAYER (use cases)
@@ -62,6 +68,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => LogoutUsecase(sl()));
   sl.registerLazySingleton(() => RegisterBiometricUsecase(sl()));
   sl.registerLazySingleton(() => VerifyBiometricUsecase(sl()));
+  sl.registerLazySingleton(() => GetProducts(sl()));
 
   // =========================================================================
   // DATA LAYER
@@ -75,11 +82,17 @@ Future<void> init() async {
     localDatasource: sl(),
     remoteDatasource: sl()
   ));
+  sl.registerLazySingleton<ProductRepository>(
+    () => ProductRepositoryImpl(sl()),
+  );
   // Data sources
   sl.registerLazySingleton<AuthLocalDataSource>(() => AuthLocalDataSourceImpl(secureStorage: sl()));
   sl.registerLazySingleton<AuthRemoteDataSource>(() => AuthRemoteDataSourceImpl(apiClient: sl()));
   sl.registerLazySingleton<BiometricLocalDataSource>(() => BiometricLocalDataSourceImpl(secureStorage: sl()));
   sl.registerLazySingleton<BiometricRemoteDataSource>(() => BiometricRemoteDataSourceImpl(sl()));
+  sl.registerLazySingleton<ProductRemoteDataSource>(
+    () => ProductRemoteDataSourceImpl(sl()),
+  );
 
   // =========================================================================
   // CORE & EXTERNAL

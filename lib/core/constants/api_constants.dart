@@ -27,4 +27,9 @@ class Endpoints {
   final String logout = "/logout";
   final String registerBiometric = "/biometric/register";
   final String verifyBiometric = "/login/biometric";
+
+  // product & category
+  final String products = '/products';
+  String productsById(int id) => "/products/$id";
+  final String categories = '/categories';
 }

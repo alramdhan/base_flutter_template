@@ -42,6 +42,24 @@ class AppThemes {
         ),
       ),
 
+      // 
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        elevation: 8,
+        selectedItemColor: AppColors.primary,
+        showUnselectedLabels: true,
+        selectedIconTheme: IconThemeData(
+          color: AppColors.primary,
+          size: 20
+        ),
+        unselectedLabelStyle: TextStyle(
+          color: Colors.grey
+        ),
+        unselectedIconTheme: IconThemeData(
+          color: Colors.grey,
+          size: 20
+        )
+      ),
+
       // Konfigurasi Default TextFormField (Minimalis seperti sebelumnya)
       inputDecorationTheme: InputDecorationTheme(
         filled: true,

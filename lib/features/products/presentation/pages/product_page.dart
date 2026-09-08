@@ -1,25 +1,18 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:login_biometrics_app/core/components/minimalist_textfield.dart';
 import 'package:login_biometrics_app/features/products/presentation/bloc/product_bloc.dart';
 import 'package:login_biometrics_app/features/products/presentation/pages/product_list_page.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class ProductPage extends StatelessWidget {
+  const ProductPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: const Text("Beranda"),
+        title: const Text("Produk"),
         bottom: PreferredSize(
           preferredSize: const .fromHeight(56),
           child: Padding(

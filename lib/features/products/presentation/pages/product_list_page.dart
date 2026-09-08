@@ -3,24 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:login_biometrics_app/core/utils/app_logger.dart';
 import 'package:login_biometrics_app/features/products/presentation/bloc/product_bloc.dart';
 import 'package:login_biometrics_app/features/products/presentation/widgets/product_grid_view.dart';
-import 'package:login_biometrics_app/service_locator.dart';
 
 class ProductListPage extends StatelessWidget {
   const ProductListPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    // ProductBloc diambil dari service locator (get_it) yang sudah didaftarkan
-    // di injection_container.dart, lalu langsung fetch data halaman pertama.
-    return BlocProvider(
-      create: (_) => sl<ProductBloc>()..add(const FetchProducts()),
-      child: const _ProductListView(),
-    );
-  }
-}
-
-class _ProductListView extends StatelessWidget {
-  const _ProductListView();
 
   @override
   Widget build(BuildContext context) {
@@ -74,15 +59,15 @@ class _ErrorView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const .all(24),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: [
             Icon(Icons.wifi_off_rounded, size: 48, color: Colors.grey.shade400),
             const SizedBox(height: 12),
             Text(
               message,
-              textAlign: TextAlign.center,
+              textAlign: .center,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(height: 16),
@@ -101,7 +86,7 @@ class _EmptyView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: .min,
         children: [
           Icon(Icons.inventory_2_outlined, size: 48, color: Colors.grey.shade400),
           const SizedBox(height: 12),

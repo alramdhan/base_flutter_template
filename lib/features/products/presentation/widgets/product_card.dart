@@ -20,13 +20,13 @@ class ProductCard extends StatelessWidget {
     final isOutOfStock = product.stock <= 0;
 
     return Card(
-      clipBehavior: Clip.antiAlias,
+      clipBehavior: .antiAlias,
       elevation: 1.5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
         onTap: onTap,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: .start,
           children: [
             // --- Gambar produk + badge stok menumpuk di pojok ---
             AspectRatio(
@@ -63,48 +63,50 @@ class ProductCard extends StatelessWidget {
             ),
 
             // --- Info produk ---
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 8, 10, 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (product.category != null)
-                    Text(
-                      product.category!.name,
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: theme.colorScheme.primary,
-                        fontWeight: FontWeight.w600,
+            Expanded(
+              child: Padding(
+                padding: const .fromLTRB(10, 8, 10, 10),
+                child: Column(
+                  crossAxisAlignment: .start,
+                  children: [
+                    if (product.category != null)
+                      Text(
+                        product.category!.name,
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: theme.colorScheme.primary,
+                          fontWeight: .w600,
+                        ),
+                        maxLines: 1,
+                        overflow: .ellipsis,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    const SizedBox(height: 2),
+                    Text(
+                      product.name,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        fontWeight: .w600,
+                      ),
+                      maxLines: 2,
+                      overflow: .ellipsis,
                     ),
-                  const SizedBox(height: 2),
-                  Text(
-                    product.name,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
+                    const Spacer(),
+                    Text(
+                      product.priceFormatted,
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: .bold,
+                        color: theme.colorScheme.primary,
+                      ),
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    product.priceFormatted,
-                    style: theme.textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: theme.colorScheme.primary,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    'Stok: ${product.stock} ${product.unit}',
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: isOutOfStock
+                    const SizedBox(height: 2),
+                    Text(
+                      'Stok: ${product.stock} ${product.unit}',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: isOutOfStock
                           ? theme.colorScheme.error
                           : Colors.grey.shade600,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],
@@ -131,7 +133,7 @@ class _ProductImage extends StatelessWidget {
         if (progress == null) return child;
         return Container(
           color: Colors.grey.shade200,
-          alignment: Alignment.center,
+          alignment: .center,
           child: const CircularProgressIndicator(strokeWidth: 2),
         );
       },
@@ -142,7 +144,7 @@ class _ProductImage extends StatelessWidget {
   Widget _placeholder() {
     return Container(
       color: Colors.grey.shade200,
-      alignment: Alignment.center,
+      alignment: .center,
       child: Icon(Icons.inventory_2_outlined, size: 36, color: Colors.grey.shade400),
     );
   }
@@ -156,17 +158,17 @@ class _Badge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const .symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: .circular(6),
       ),
       child: Text(
         label,
         style: const TextStyle(
           color: Colors.white,
           fontSize: 10,
-          fontWeight: FontWeight.bold,
+          fontWeight: .bold,
         ),
       ),
     );

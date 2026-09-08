@@ -1,28 +1,36 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:login_biometrics_app/core/components/minimalist_textfield.dart';
+import 'package:login_biometrics_app/features/products/presentation/bloc/category_cubit.dart';
+import 'package:login_biometrics_app/features/products/presentation/bloc/product_bloc.dart';
 import 'package:login_biometrics_app/features/products/presentation/pages/product_list_page.dart';
+import 'package:login_biometrics_app/features/products/presentation/widgets/category_filter_chips.dart';
+import 'package:login_biometrics_app/service_locator.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => sl<ProductBloc>()..add(const FetchProducts()),
+        ),
+        BlocProvider(
+          create: (_) => sl<CategoryCubit>()..fetchCategories(),
+        )
+      ],
+      child: const _HomePageView(),
+    );
+  }
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageView extends StatelessWidget {
+  const _HomePageView();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,14 +41,21 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: const Text("Beranda"),
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(56),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-            child: _SearchField(
-              onChanged: (keyword) => {},//context.read<ProductBloc>().add(SearchProducts(keyword)),
-            ),
+          preferredSize: const .fromHeight(56),
+          child: Column(
+            children: [
+              Padding(
+                padding: const .fromLTRB(16, 0, 16, 12),
+                child: _SearchField(
+                  onChanged: (keyword) => {
+                    context.read<ProductBloc>().add(SearchProducts(keyword))
+                  },
+                ),
+              ),
+              const CategoryFilterChips()
+            ],
           ),
         ),
       ),

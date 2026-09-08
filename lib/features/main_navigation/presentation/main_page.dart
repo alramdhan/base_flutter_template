@@ -8,7 +8,7 @@ class MainNavPage extends StatelessWidget {
   const MainNavPage({super.key});
 
   final List<Widget> _pages = const [
-    MyHomePage(title: "Home Page"),
+    HomePage(),
     SettingPage()
   ];
 

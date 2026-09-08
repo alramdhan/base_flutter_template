@@ -32,8 +32,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     // Debounce khusus search supaya tidak fetch API di setiap ketikan.
     on<SearchProducts>(
       _onSearchProducts,
-      transformer: (events, mapper) =>
-          events.debounce(_searchDebounceDuration).switchMap(mapper),
+      transformer: (events, mapper) => events.debounce(_searchDebounceDuration).switchMap(mapper),
     );
   }
 

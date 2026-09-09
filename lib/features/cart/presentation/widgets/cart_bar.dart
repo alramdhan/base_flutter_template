@@ -66,15 +66,16 @@ class CartBar extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
+                    mainAxisSize: .min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('${cart.totalItems} item',
-                          style: theme.textTheme.bodySmall
-                              ?.copyWith(color: theme.colorScheme.outline)),
+                        style: theme.textTheme.bodySmall
+                          ?.copyWith(color: theme.colorScheme.outline)),
                       Text(
                         _formatRupiah(cart.totalPrice),
                         style: theme.textTheme.titleSmall
-                            ?.copyWith(fontWeight: FontWeight.bold),
+                          ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),

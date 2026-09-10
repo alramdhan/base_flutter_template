@@ -26,33 +26,26 @@ class CartBar extends StatelessWidget {
             color: theme.colorScheme.surface,
           ),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: SafeArea(
-            top: false,
-            child: Row(
-              children: [
-                Stack(
-                  alignment: Alignment.topRight,
-                  children: [
-                    Container(
-                      width: 44,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.primary,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      alignment: Alignment.center,
-                      child: Icon(Icons.shopping_cart,
-                          color: theme.colorScheme.onPrimary, size: 20),
+          child: Row(
+            children: [
+              Stack(
+                children: [
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.primary,
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    Container(
-                      width: 20,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.error,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
+                    alignment: Alignment.center,
+                    child: Icon(Icons.shopping_cart,
+                        color: theme.colorScheme.onPrimary, size: 20),
+                  ),
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: Badge(
+                      label: Text(
                         '${cart.totalItems}',
                         style: TextStyle(
                           color: theme.colorScheme.onError,
@@ -61,29 +54,29 @@ class CartBar extends StatelessWidget {
                         ),
                       ),
                     ),
+                  ),
+                ],
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  mainAxisSize: .min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('${cart.totalItems} item',
+                      style: theme.textTheme.bodySmall
+                        ?.copyWith(color: theme.colorScheme.outline)),
+                    Text(
+                      "Rp ${cart.totalPrice}",
+                      style: theme.textTheme.titleSmall
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
                   ],
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    mainAxisSize: .min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('${cart.totalItems} item',
-                        style: theme.textTheme.bodySmall
-                          ?.copyWith(color: theme.colorScheme.outline)),
-                      Text(
-                        _formatRupiah(cart.totalPrice),
-                        style: theme.textTheme.titleSmall
-                          ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 12),
-                FilledButton(onPressed: onCheckoutTap, child: const Text('Bayar')),
-              ],
-            ),
+              ),
+              const SizedBox(width: 12),
+              FilledButton(onPressed: onCheckoutTap, child: const Text('Bayar')),
+            ],
           ),
         );
       },
@@ -91,9 +84,3 @@ class CartBar extends StatelessWidget {
   }
 }
 
-String _formatRupiah(int value) {
-  return 'Rp${value.toString().replaceAllMapped(
-        RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
-        (Match m) => '${m[1]}.',
-      )}';
-}

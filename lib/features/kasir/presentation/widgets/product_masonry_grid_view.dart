@@ -4,6 +4,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:login_biometrics_app/core/utils/app_logger.dart';
 import 'package:login_biometrics_app/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:login_biometrics_app/features/kasir/presentation/widgets/product_card.dart';
+import 'package:login_biometrics_app/features/kasir/presentation/widgets/skeleton_product_card.dart';
 import 'package:login_biometrics_app/features/products/presentation/bloc/product_bloc.dart';
 
 class ProductMasonryGridView extends StatefulWidget {
@@ -44,7 +45,19 @@ class _ProductMasonryGridViewState extends State<ProductMasonryGridView> {
     return BlocBuilder<ProductBloc, ProductState>(
       builder: (context, state) {
         if (state is ProductLoading || state is ProductInitial) {
-          return const Center(child: CircularProgressIndicator());
+          return GridView.builder(
+            padding: const .only(left: 16, top: 8, right: 16),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 16,
+              crossAxisSpacing: 16,
+              childAspectRatio: .68
+            ),
+            itemCount: 10,
+            itemBuilder: (context, index) {
+              return const SkeletonProductCard();
+            }
+          );
         }
 
         if (state is ProductError) {
@@ -61,7 +74,6 @@ class _ProductMasonryGridViewState extends State<ProductMasonryGridView> {
         if (loadedState.products.isEmpty) {
           return const _EmptyView();
         }
-
 
         return RefreshIndicator(
           onRefresh: () async {

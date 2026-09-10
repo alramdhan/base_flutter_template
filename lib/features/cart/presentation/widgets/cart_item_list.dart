@@ -21,7 +21,7 @@ class CartItemList extends StatelessWidget {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: items.length,
-          separatorBuilder: (_, __) => Divider(color: theme.dividerColor),
+          separatorBuilder: (_, _) => Divider(color: theme.dividerColor),
           itemBuilder: (context, index) {
             final item = items[index];
             // Nonaktifkan tombol +/- pada item ini SAJA saat sedang diproses,
@@ -91,13 +91,13 @@ class _CartItemTile extends StatelessWidget {
                       // Nonaktifkan saat processing agar tidak double-dispatch
                       // event sebelum request sebelumnya selesai diproses BLoC.
                       onPress: isProcessing
-                          ? null
-                          : () => context.read<CartBloc>().add(
-                                UpdateCartItemQuantity(
-                                  productId: item.product.id,
-                                  newQuantity: item.quantity - 1,
-                                ),
-                              ),
+                        ? null
+                        : () => context.read<CartBloc>().add(
+                          UpdateCartItemQuantity(
+                            productId: item.product.id,
+                            newQuantity: item.quantity - 1,
+                          ),
+                        ),
                     ),
                     SizedBox(
                       width: 36,

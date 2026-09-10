@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:login_biometrics_app/core/components/loader/shimmer_loader.dart';
+import 'package:login_biometrics_app/core/components/loader/title_placeholder.dart';
 import 'package:login_biometrics_app/features/products/presentation/bloc/category_cubit.dart';
 import 'package:login_biometrics_app/features/products/presentation/bloc/category_state.dart';
 
@@ -14,10 +16,28 @@ class CategoryFilterChips extends StatelessWidget {
     return BlocBuilder<CategoryCubit, CategoryState>(
       builder: (context, state) {
         if (state is CategoryLoading || state is CategoryInitial) {
-          return const SizedBox(
+          return SizedBox(
             height: 40,
-            child: Center(
-              child: CircularProgressIndicator(strokeWidth: 2),
+            child: ListView.separated(
+              padding: const .symmetric(horizontal: 16),
+              scrollDirection: .horizontal,
+              itemCount: 4,
+              separatorBuilder: (_, _) => const SizedBox(width: 8),
+              itemBuilder: (_, index) => Container(
+                decoration: BoxDecoration(
+                  border: Border.all(),
+                  borderRadius: .circular(8),
+                ),
+                child: ShimmerLoader(
+                  child: Padding(
+                    padding: const .symmetric(horizontal: 8.0, vertical: 14.0),
+                    child: TitlePlaceholder(
+                      words: index == 0 ? 1 : 2,
+                      width: index == 1 ? 75 : null
+                    ),
+                  )
+                ),
+              ),
             ),
           );
         }

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:login_biometrics_app/features/cart/domain/entities/cart_item_entity.dart';
 import 'package:login_biometrics_app/features/cart/presentation/bloc/cart_bloc.dart';
 
 /// Bar keranjang sticky di bawah. Menampilkan icon cart + badge jumlah
 /// item + total harga + tombol checkout.
 class CartBar extends StatelessWidget {
-  final VoidCallback? onCheckoutTap;
+  final void Function(BuildContext, int, List<CartItemEntity>) onCheckoutTap;
 
-  const CartBar({super.key, this.onCheckoutTap});
+  const CartBar({super.key, required this.onCheckoutTap});
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +76,7 @@ class CartBar extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              FilledButton(onPressed: onCheckoutTap, child: const Text('Bayar')),
+              FilledButton(onPressed: () => onCheckoutTap(context, cart.totalItems, cart.items), child: const Text('Bayar')),
             ],
           ),
         );

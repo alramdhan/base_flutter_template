@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:login_biometrics_app/core/components/minimalist_textfield.dart';
-import 'package:login_biometrics_app/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:login_biometrics_app/features/cart/domain/entities/cart_item_entity.dart';
 import 'package:login_biometrics_app/features/cart/presentation/widgets/cart_bar.dart';
 import 'package:login_biometrics_app/features/cart/presentation/widgets/cart_item_list.dart';
 import 'package:login_biometrics_app/features/kasir/presentation/widgets/product_masonry_grid_view.dart';
@@ -55,7 +55,8 @@ class KasirPage extends StatelessWidget {
                   ],
                 ),
               ),
-              const CategoryFilterChips()
+              const CategoryFilterChips(),
+              const SizedBox(height: 8)
             ],
           ),
         ),
@@ -65,21 +66,20 @@ class KasirPage extends StatelessWidget {
           const ProductMasonryGridView(),
           Align(
             alignment: Alignment.bottomCenter,
-            child: CartBar(
-              onCheckoutTap: () => _showCartDetailSheet(context),
-            ),
+            child: CartBar(onCheckoutTap: _showCartDetailSheet),
           ),
         ],
       ),
     );
   }
 
-  void _showCartDetailSheet(BuildContext context) {
+  void _showCartDetailSheet(BuildContext context, int totalPrice, List<CartItemEntity> items) {
+    final theme = Theme.of(context);
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (context) => DraggableScrollableSheet(
-        expand: false,
+        expand: true,
         initialChildSize: 0.7,
         maxChildSize: 0.9,
         minChildSize: 0.5,
@@ -109,56 +109,46 @@ class KasirPage extends StatelessWidget {
                       children: [
                         const CartItemList(),
                         const SizedBox(height: 24),
-                        BlocBuilder<CartBloc, CartState>(
-                          builder: (context, state) {
-                            if (state is! CartLoaded || state.cart.isEmpty) return const SizedBox();
-
-                            final cart = state.cart;
-                            final theme = Theme.of(context);
-
-                            return Column(
+                        Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: .spaceBetween,
                               children: [
-                                Row(
-                                  mainAxisAlignment: .spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Total',
-                                      style: theme.textTheme.titleMedium,
-                                    ),
-                                    Text(
-                                      cart.totalPrice.toString(),
-                                      // 'Rp\${cart.totalPrice.toString().replaceAllMapped(
-                                      //   RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
-                                      //   (Match m) => '\${m[1]}.',
-                                      // )}',
-                                      style: theme.textTheme.headlineSmall?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: theme.colorScheme.primary,
-                                      ),
-                                    ),
-                                  ],
+                                Text(
+                                  'Total',
+                                  style: theme.textTheme.titleMedium,
                                 ),
-                                const SizedBox(height: 16),
-                                SizedBox(
-                                  width: double.infinity,
-                                  height: 48,
-                                  child: FilledButton(
-                                    onPressed: () {
-                                      // TODO: navigasi ke halaman checkout/pembayaran
-                                      Navigator.pop(context);
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                          content:
-                                              Text('Lanjut ke pembayaran...'),
-                                        ),
-                                      );
-                                    },
-                                    child: const Text('Lanjut Pembayaran'),
+                                Text(
+                                  totalPrice.toString(),
+                                  // 'Rp\${cart.totalPrice.toString().replaceAllMapped(
+                                  //   RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
+                                  //   (Match m) => '\${m[1]}.',
+                                  // )}',
+                                  style: theme.textTheme.headlineSmall?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: theme.colorScheme.primary,
                                   ),
                                 ),
                               ],
-                            );
-                          },
+                            ),
+                            const SizedBox(height: 16),
+                            SizedBox(
+                              width: double.infinity,
+                              height: 48,
+                              child: FilledButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content:
+                                          Text('Lanjut ke pembayaran...'),
+                                    ),
+                                  );
+                                },
+                                child: const Text('Lanjut Pembayaran'),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),

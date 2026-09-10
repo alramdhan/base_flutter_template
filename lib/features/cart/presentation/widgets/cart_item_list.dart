@@ -6,31 +6,25 @@ import 'package:login_biometrics_app/features/cart/presentation/bloc/cart_bloc.d
 /// List item keranjang dengan qty control +/- dan tombol hapus.
 /// Biasanya dipakai di dalam bottom sheet detail keranjang.
 class CartItemList extends StatelessWidget {
-  const CartItemList({super.key});
+  const CartItemList(this.items, {super.key});
+
+  final List<CartItemEntity> items;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CartBloc, CartState>(
-      builder: (context, state) {
-        if (state is! CartLoaded) return const SizedBox.shrink();
-
-        final items = state.cart.items;
-        final theme = Theme.of(context);
-
-        return ListView.separated(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: items.length,
-          separatorBuilder: (_, _) => Divider(color: theme.dividerColor),
-          itemBuilder: (context, index) {
-            final item = items[index];
-            // Nonaktifkan tombol +/- pada item ini SAJA saat sedang diproses,
-            // item lain tetap bisa diinteraksi normal.
-            final isProcessing = state.processingProductId == item.product.id;
-
-            return _CartItemTile(item: item, isProcessing: isProcessing);
-          },
-        );
+    final theme = Theme.of(context);
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: items.length,
+      separatorBuilder: (_, _) => Divider(color: theme.dividerColor),
+      itemBuilder: (context, index) {
+        final item = items[index];
+        // Nonaktifkan tombol +/- pada item ini SAJA saat sedang diproses,
+        // item lain tetap bisa diinteraksi normal.
+        // final isProcessing = state.processingProductId == item.product.id;
+    
+        return _CartItemTile(item: item, isProcessing: false);
       },
     );
   }

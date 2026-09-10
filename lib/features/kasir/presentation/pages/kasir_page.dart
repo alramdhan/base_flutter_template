@@ -107,7 +107,7 @@ class KasirPage extends StatelessWidget {
                     padding: const .all(16),
                     child: Column(
                       children: [
-                        const CartItemList(),
+                        CartItemList(items),
                         const SizedBox(height: 24),
                         Column(
                           children: [
